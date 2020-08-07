@@ -21,6 +21,7 @@ const game = () => {
 	player1.myTurn = true;
 	player2.myTurn = false;
 	let counter = 0;
+	let keepGoing = true;
 
 	const whoseTurn = () => {
 		myTurn = players.find(player=>player.myTurn===true);
@@ -33,14 +34,48 @@ const game = () => {
 	}
 
 	const turnCounter = () => {
-		counter++;
+		if(counter<=8&&keepGoing){
+			counter++;
+			console.log(counter);
+		} else{
+			keepGoing = false;
+			console.log("This is the false part of turnCounter and keepGoing is" + keepGoing);
+		}
 	}
 
 	const checkCounter = () =>{
 		return counter;
 	}
 
-	return {whoseTurn, nextTurn, turnCounter, checkCounter};
+	const checkWin = (array) =>{
+		 let regex = /X{3}|O{3}/;
+		 let rowcheck = "";
+		 let colcheck = "";
+		 let diagcheck = "";
+
+//row check
+  			for(let j=0; j<3; j++){
+	    		for(let i=0; i<3; i++){
+      			rowcheck += array[i + (j*3)];
+      			}
+    		rowcheck += " ";
+  			}
+//column check 
+  			for(let j=0; j<3; j++){
+	    		for(let i=0; i<3; i++){
+      			colcheck += array[(i * 3) + j];
+      			}
+    		colcheck += " ";
+  			}
+//diagonal check
+  		diagcheck = array[0] + array[4] + array[8] + " " + array[2] + array[4] + array [6];
+  if(rowcheck.match(regex)||colcheck.match(regex)||diagcheck.match(regex)){
+  	keepGoing = false;
+  	console.log("This is the false part of checkWin and keepGoing is" + keepGoing);
+  };
+}
+
+	return {whoseTurn, nextTurn, turnCounter, checkCounter, checkWin, keepGoing};
 }
 
 const newGame = game();
@@ -49,7 +84,7 @@ const newGame = game();
 (function (){
 let myGameBoard = {
 
-	boardArray: ["X", "X", "O", "X", "O", "X", "O", "X", "O"],
+	boardArray: ["", "", "", "", "", "", "", "", ""],
 
 	init: function(){
 		this.cacheDom();
@@ -68,12 +103,14 @@ let myGameBoard = {
 	},
 
 	playSquare: function(event){
-		if((newGame.checkCounter()<=8)&&event.target.textContent===""){
+		if((newGame.keepGoing)&&event.target.textContent===""){
 			//returns the player object whose turn it is
 			let myTurn = newGame.whoseTurn();
 			event.target.textContent = myTurn.XO;
 			let index = Array.prototype.indexOf.call(this.gameBoard.children, event.target);
 			this.boardArray[index] = myTurn.XO;
+			newGame.checkWin(this.boardArray);
+			console.log("playSquare thinks keepGoing is" + newGame.keepGoing);
 			newGame.nextTurn();
 			newGame.turnCounter();
 		}
@@ -85,10 +122,6 @@ let myGameBoard = {
 		}
 
 		this.playerDiv.textContent = "Test";
-//we're going to fuck around with the rows and columns in here 
-let string1 = this.boardArray[0] + this.boardArray[1] + this.boardArray[2];
-console.log(string1);
-
 	},
 
  };
