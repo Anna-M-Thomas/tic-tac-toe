@@ -9,8 +9,19 @@
 </head>
 
 <body>
+	  <h1>Tic-Tac-Toe</h1>
 		<div id="container">
 		<div id="playerinfo">
+			<form id="playerform">
+      			<h2>Player Info</h2>
+      			<label>Name for player 1 (X)
+     			 <input type="text" placeholder="George" id= "player1" name="player1" required><br>
+     			 </label>
+      			<label>Name for player 2 (0)
+     			 <input type="text" placeholder="Betsy" id="player2" name="player2" required><br>
+     			 </label>
+      			<button type="button" id="finishedbutton">Finished</button>
+    		</form>
 		</div>
 		<div id="gameboard">
 			<div id="zero" class="boardsquare"></div>
@@ -22,7 +33,8 @@
 			<div id="six" class="boardsquare"></div>
 			<div id="seven" class="boardsquare"></div>
 			<div id="eight" class="boardsquare"></div>
-			<div id="players"></div>
+			<div id="players"><button id="startbutton">Play</button>
+			</div>
 		</div>
 	</div>
 </body>

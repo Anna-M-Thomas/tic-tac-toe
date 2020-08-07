@@ -1,27 +1,27 @@
 document.addEventListener("DOMContentLoaded", function(){
 
 const player = (name, XO) => {
-	const selfIntro = () => {
-		return `Name: ${name} X or O: ${XO}`;
-	}
 	let myTurn = null;
-	return {name, XO, selfIntro, myTurn};
+	return {name, XO, myTurn};
 };
 
-const George = player("George_the_Cat", "X");
-const Betsy = player("Betsy_the_Caterpillar", "O");
-
-//There's going to need to be more than one game...
-//Tie this into an event listener on a button
-const game = () => {
-	//You can just set one to true and one to false while making them
-	let player1 = George;
-	let player2 = Betsy;
-	let players = [player1, player2];
-	player1.myTurn = true;
-	player2.myTurn = false;
+const game = (() => {
 	let counter = 0;
-	let keepGoing = true;
+	let keepGoing = false;
+	let players = [];
+	let player1;
+	let player2;
+
+	//You can just set one to true and one to false while making them
+	const getPlayers = (player1obj, player2obj) => {
+		player1 = player1obj;
+		player2 = player2obj;
+		players.push(player1);
+		players.push(player2);
+		player1.myTurn = true;
+		player2.myTurn = false;
+		keepGoing = true;
+	}
 
 	const whoseTurn = () => {
 		myTurn = players.find(player=>player.myTurn===true);
@@ -31,20 +31,15 @@ const game = () => {
 	const nextTurn = () =>{
 		player1.myTurn = !(player1.myTurn);
 		player2.myTurn = !(player2.myTurn);
-	}
-
-	const turnCounter = () => {
-		if(counter<=8&&keepGoing){
+				if(counter<8&&keepGoing){
 			counter++;
-			console.log(counter);
 		} else{
 			keepGoing = false;
-			console.log("This is the false part of turnCounter and keepGoing is" + keepGoing);
 		}
 	}
 
-	const checkCounter = () =>{
-		return counter;
+	const keepGoingCheck = () =>{
+		return keepGoing;
 	}
 
 	const checkWin = (array) =>{
@@ -74,14 +69,12 @@ const game = () => {
   	console.log("This is the false part of checkWin and keepGoing is" + keepGoing);
   };
 }
-
-	return {whoseTurn, nextTurn, turnCounter, checkCounter, checkWin, keepGoing};
-}
-
-const newGame = game();
+	return {getPlayers, whoseTurn, nextTurn, keepGoingCheck, checkWin};
+})();
 
 //anonymous function for the game board
 (function (){
+	'use strict';
 let myGameBoard = {
 
 	boardArray: ["", "", "", "", "", "", "", "", ""],
@@ -96,23 +89,47 @@ let myGameBoard = {
 		this.gameBoard = document.getElementById('gameboard');
 		this.squareDivs = document.getElementsByClassName("boardsquare");
 		this.playerDiv = document.getElementById('players');
+		this.playerInfo = document.getElementById('playerinfo');
+		this.playButton = document.getElementById('startbutton');
+		this.playerForm = document.getElementById('playerform');
+		this.player1field = document.getElementById('player1');
+		this.player2field = document.getElementById('player2');
+		this.playerFormButton = document.getElementById('finishedbutton');
 	},
 
 	bindEvents: function(){
+		this.playButton.addEventListener('click', this.showForm.bind(this));
+		this.playerFormButton.addEventListener('click', this.formDone.bind(this));
 		this.gameBoard.addEventListener('click', this.playSquare.bind(this));
 	},
 
+	showForm: function(){
+		this.playerInfo.style.display = "inline";
+		this.gameBoard.style.filter = "brightness(50%)";
+	},
+
+	formDone: function(){
+		if(this.playerForm.reportValidity()){
+			let player1obj = player(this.player1field.value, "X");
+			let player2obj = player(this.player2field.value, "O");
+			game.getPlayers(player1obj, player2obj);
+			this.playerDiv.textContent = `${player1obj.name}: ${player1obj.XO}, ${player2obj.name}: ${player2obj.XO} `
+			this.playButton.style.display = "none";
+			this.playerInfo.style.display = "none";
+			this.gameBoard.style.filter = "brightness(100%)";
+		}
+	}, 
+
 	playSquare: function(event){
-		if((newGame.keepGoing)&&event.target.textContent===""){
+		if((game.keepGoingCheck())&&event.target.textContent===""){
 			//returns the player object whose turn it is
-			let myTurn = newGame.whoseTurn();
+			let myTurn = game.whoseTurn();
 			event.target.textContent = myTurn.XO;
 			let index = Array.prototype.indexOf.call(this.gameBoard.children, event.target);
 			this.boardArray[index] = myTurn.XO;
-			newGame.checkWin(this.boardArray);
-			console.log("playSquare thinks keepGoing is" + newGame.keepGoing);
-			newGame.nextTurn();
-			newGame.turnCounter();
+			game.checkWin(this.boardArray);
+			console.log("playSquare thinks keepGoing is" + game.keepGoingCheck());
+			game.nextTurn();
 		}
 	},
 
@@ -120,8 +137,6 @@ let myGameBoard = {
 		for(let i=0; i<this.boardArray.length; i++){
 			this.squareDivs[i].textContent= this.boardArray[i];
 		}
-
-		this.playerDiv.textContent = "Test";
 	},
 
  };

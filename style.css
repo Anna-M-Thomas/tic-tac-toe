@@ -1,34 +1,74 @@
+/*Palette created with coolers https://coolors.co/e8efe6-007aa3-f4ebc8-fac5a8-ffc18a*/
+
+body {
+	background-color: #F4EBC8;
+	margin: 0;
+}
+
+h1 {
+	text-align: center;
+	background-color: #E8EFE6;
+	margin-top: 0;
+	height: 80px;
+	line-height: 80px;
+	margin-bottom: 8%;
+	box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+}
+
 #container {
 	display: flex;
 	height: 100vh;
-	align-items: center;
-	justify-content: space-evenly;
+	justify-content: center;
 } 
 
 #playerinfo {
 	width: 300px;
-	height: 400px;
-	background-color: lightgray;
+	height: 300px;
+	background-color: #E8EFE6;
+	box-shadow : 0 0 0 4px black;
+	display: none;
+	position: absolute;
+	z-index: 1;
 }
+
+#playerform {
+	text-align: center;
+	margin: 2%;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+input {
+	margin-bottom: 30px;
+}
+
 
 #gameboard {
 	display: grid;
 	width: 300px;
 	height: 400px;
-	background-color: #e6e0ad;
-	grid-template-columns: auto auto auto;
-	grid-template-rows: auto auto auto auto;
+	background-color: #09C;
+	grid-template-columns: 33% auto 33%;
+	grid-template-rows: 25% 25% 25% 25%;
 }
 
 .boardsquare {
-	background-color: pink;
-	margin: 2px;
+	background-color: #FAC5A8;
+	box-shadow : 0 0 0 4px black;
 	text-align: center;
-	padding-top: 45%;
+	padding-top: 25px;
+	font-size: 40px;
+}
+
+.boardsquare:hover {
+	background-color: #F8B18B;
 }
 
 #players {
-	background-color: yellow;
+	background-color: #FFC18A;
+	box-shadow : 0 0 0 4px black;
 	grid-column-start: 1;
 	grid-column-end: 4;
+	text-align: center;
+	line-height: 100px;
 }
