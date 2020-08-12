@@ -12,7 +12,7 @@ const game = (() => {
 	let player1;
 	let player2;
 
-	//You can just set one to true and one to false while making them
+	//Get players and start game
 	const getPlayers = (player1obj, player2obj) => {
 		player1 = player1obj;
 		player2 = player2obj;
@@ -23,11 +23,14 @@ const game = (() => {
 		keepGoing = true;
 	}
 
+//returns the player whose turn it is
 	const whoseTurn = () => {
 		myTurn = players.find(player=>player.myTurn===true);
 		return myTurn;
 	}
 
+//Changes to next turn unless there's a win or no more turns left
+//Combine this with checkWin somehow?
 	const nextTurn = () =>{
 		player1.myTurn = !(player1.myTurn);
 		player2.myTurn = !(player2.myTurn);
@@ -37,44 +40,56 @@ const game = (() => {
 			keepGoing = false;
 		}
 	}
+	const endGame = () =>{
+		players = [];
+		counter = 0; 
+		rowcheck = "";
+		colcheck = "";
+		diagcheck = "";
+	}
 
+//Check if the game has already ended
 	const keepGoingCheck = () =>{
 		return keepGoing;
 	}
 
+//Check for a win
 	const checkWin = (array) =>{
 		 let regex = /X{3}|O{3}/;
 		 let rowcheck = "";
 		 let colcheck = "";
 		 let diagcheck = "";
 
-//row check
+	//row check!
   			for(let j=0; j<3; j++){
 	    		for(let i=0; i<3; i++){
       			rowcheck += array[i + (j*3)];
       			}
     		rowcheck += " ";
   			}
-//column check 
+	//column check!
   			for(let j=0; j<3; j++){
 	    		for(let i=0; i<3; i++){
       			colcheck += array[(i * 3) + j];
       			}
     		colcheck += " ";
   			}
-//diagonal check
+	//diagonal check!
   		diagcheck = array[0] + array[4] + array[8] + " " + array[2] + array[4] + array [6];
   if(rowcheck.match(regex)||colcheck.match(regex)||diagcheck.match(regex)){
   	keepGoing = false;
-  	console.log("This is the false part of checkWin and keepGoing is" + keepGoing);
+ //this should return the regex match to check if it matches winner shown
+  	console.log(rowcheck.match(regex)||colcheck.match(regex)||diagcheck.match(regex));
+  }else{
+  	return 0;
   };
 }
-	return {getPlayers, whoseTurn, nextTurn, keepGoingCheck, checkWin};
+	return {getPlayers, whoseTurn, nextTurn, keepGoingCheck, checkWin, endGame};
 })();
 
 //anonymous function for the game board
 (function (){
-	'use strict';
+
 let myGameBoard = {
 
 	boardArray: ["", "", "", "", "", "", "", "", ""],
@@ -85,10 +100,12 @@ let myGameBoard = {
 		this.render();
 	},
 
+//Check to see if there's stuff you didn't actually need here
 	cacheDom: function(){
 		this.gameBoard = document.getElementById('gameboard');
 		this.squareDivs = document.getElementsByClassName("boardsquare");
-		this.playerDiv = document.getElementById('players');
+		this.displayTextSpan = document.getElementById('displaytext');
+		this.buttonDiv = document.getElementById('buttondiv');
 		this.playerInfo = document.getElementById('playerinfo');
 		this.playButton = document.getElementById('startbutton');
 		this.playerForm = document.getElementById('playerform');
@@ -104,38 +121,72 @@ let myGameBoard = {
 	},
 
 	showForm: function(){
+		this.render();
 		this.playerInfo.style.display = "inline";
 		this.gameBoard.style.filter = "brightness(50%)";
 	},
 
+	hideForm: function(){
+		this.playerForm.reset();
+		this.playerInfo.style.display = "none";
+		this.gameBoard.style.filter = "brightness(100%)";
+	},
+
+	showButton: function(){
+		this.playButton.style.display = "inline";
+		this.buttonDiv.style.height= "40px";
+	},
+
+	hideButton: function(){
+		this.playButton.style.display = "none";
+		this.buttonDiv.style.height= "10px";
+	},
+
+	displayText: function(string){
+		this.displayTextSpan.innerText = string;
+	},
+
+//Makes player objects after form is done, feeds them into game, hides form
 	formDone: function(){
 		if(this.playerForm.reportValidity()){
 			let player1obj = player(this.player1field.value, "X");
 			let player2obj = player(this.player2field.value, "O");
 			game.getPlayers(player1obj, player2obj);
-			this.playerDiv.textContent = `${player1obj.name}: ${player1obj.XO}, ${player2obj.name}: ${player2obj.XO} `
-			this.playButton.style.display = "none";
-			this.playerInfo.style.display = "none";
-			this.gameBoard.style.filter = "brightness(100%)";
+			this.displayText(`${player1obj.name} is ${player1obj.XO}, ${player2obj.name} is ${player2obj.XO}`); 
+			this.hideForm();
+			this.hideButton();
 		}
 	}, 
 
+//Returns the object whose turn it is, adds X or O to div and to array
+//Checks for a win, and either calls nextTurn or ends game
 	playSquare: function(event){
 		if((game.keepGoingCheck())&&event.target.textContent===""){
-			//returns the player object whose turn it is
 			let myTurn = game.whoseTurn();
 			event.target.textContent = myTurn.XO;
 			let index = Array.prototype.indexOf.call(this.gameBoard.children, event.target);
 			this.boardArray[index] = myTurn.XO;
-			game.checkWin(this.boardArray);
-			console.log("playSquare thinks keepGoing is" + game.keepGoingCheck());
+			checkTie = game.checkWin(this.boardArray);
 			game.nextTurn();
+			let keepGoing = game.keepGoingCheck();
+			 if(keepGoing===false){
+			 	 if(checkTie ===0){
+			 	 	this.displayText("It's a tie! Press play for new game"); 
+			 	 } else {
+			 		this.displayText(`${myTurn.name} wins! Press play for new game`);
+			 		}
+			 	this.boardArray =  ["", "", "", "", "", "", "", "", ""];
+			 	game.endGame();
+			 	this.showButton();
+			 }
+
 		}
 	},
 
+//for if I want to put test values in array, and resetting for new game
 	render: function(){
 		for(let i=0; i<this.boardArray.length; i++){
-			this.squareDivs[i].textContent= this.boardArray[i];
+			this.squareDivs[i].textContent= "";
 		}
 	},
 

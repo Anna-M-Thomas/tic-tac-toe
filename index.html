@@ -15,10 +15,10 @@
 			<form id="playerform">
       			<h2>Player Info</h2>
       			<label>Name for player 1 (X)
-     			 <input type="text" placeholder="George" id= "player1" name="player1" required><br>
+     			 <input type="text" placeholder="Jean-Luc" id= "player1" name="player1" required><br>
      			 </label>
-      			<label>Name for player 2 (0)
-     			 <input type="text" placeholder="Betsy" id="player2" name="player2" required><br>
+      			<label>Name for player 2 (O)
+     			 <input type="text" placeholder="Riker" id="player2" name="player2" required><br>
      			 </label>
       			<button type="button" id="finishedbutton">Finished</button>
     		</form>
@@ -33,7 +33,12 @@
 			<div id="six" class="boardsquare"></div>
 			<div id="seven" class="boardsquare"></div>
 			<div id="eight" class="boardsquare"></div>
-			<div id="players"><button id="startbutton">Play</button>
+		</div>
+		<div id="gameboardpanel">
+			<div id="buttondiv">
+				<button id="startbutton">Play</button>
+			</div>
+				<div id="displaytextdiv"><p id="displaytext"></p></div>
 			</div>
 		</div>
 	</div>

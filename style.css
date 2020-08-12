@@ -1,24 +1,27 @@
 /*Palette created with coolers https://coolors.co/e8efe6-007aa3-f4ebc8-fac5a8-ffc18a*/
 
 body {
-	background-color: #F4EBC8;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	background-color: #C5EEF2;
 	margin: 0;
 }
 
 h1 {
 	text-align: center;
-	background-color: #E8EFE6;
+	background-color: #289389;
+	color: white;
 	margin-top: 0;
-	height: 80px;
-	line-height: 80px;
-	margin-bottom: 8%;
+	height: 60px;
+	line-height: 60px;
+	margin-bottom: 4%;
 	box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
 }
 
 #container {
 	display: flex;
 	height: 100vh;
-	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 } 
 
 #playerinfo {
@@ -39,36 +42,57 @@ h1 {
 }
 
 input {
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 }
 
 
 #gameboard {
 	display: grid;
-	width: 300px;
+	width: 400px;
 	height: 400px;
 	background-color: #09C;
 	grid-template-columns: 33% auto 33%;
-	grid-template-rows: 25% 25% 25% 25%;
+	grid-template-rows: 33% 33% 33%;
 }
 
 .boardsquare {
-	background-color: #FAC5A8;
-	box-shadow : 0 0 0 4px black;
+	background-color: #57BC90;
+	box-shadow : 0 0 0 4px #015249;
 	text-align: center;
-	padding-top: 25px;
-	font-size: 40px;
+	padding-top: 10px;
+	font-size: 90px;
 }
 
 .boardsquare:hover {
-	background-color: #F8B18B;
+	background-color: #2B8F63;
 }
 
-#players {
-	background-color: #FFC18A;
-	box-shadow : 0 0 0 4px black;
-	grid-column-start: 1;
-	grid-column-end: 4;
+#buttondiv {
+	background-color: #57BC90;
 	text-align: center;
-	line-height: 100px;
+	line-height: 40px;
+	height: 40px;
+	padding-top: 10px;
+	width: 400px;
+	border-right: solid 4px #015249;
+	border-left: solid 4px #015249;
+}
+
+button {
+	height: 30px;
+	width: 90px;
+}
+
+p {
+	margin: 0;
+}
+
+#displaytextdiv {
+	background-color: #57BC90;
+	text-align: center;
+	width: 400px;
+	height: 40px;
+	border-right: solid 4px #015249;
+	border-bottom: solid 4px #015249;
+	border-left: solid 4px #015249;
 }
