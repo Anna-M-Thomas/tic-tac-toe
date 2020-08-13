@@ -102,12 +102,15 @@ let myGameBoard = {
 
 //Check to see if there's stuff you didn't actually need here
 	cacheDom: function(){
+//gameboard stuff
 		this.gameBoard = document.getElementById('gameboard');
 		this.squareDivs = document.getElementsByClassName("boardsquare");
-		this.displayTextSpan = document.getElementById('displaytext');
 		this.buttonDiv = document.getElementById('buttondiv');
-		this.playerInfo = document.getElementById('playerinfo');
+//bottom panel stuff
 		this.playButton = document.getElementById('startbutton');
+		this.displayTextDiv = document.getElementById('displaytextdiv');
+		this.playerInfo = document.getElementById('playerinfo');
+//form stuff
 		this.playerForm = document.getElementById('playerform');
 		this.player1field = document.getElementById('player1');
 		this.player2field = document.getElementById('player2');
@@ -123,6 +126,8 @@ let myGameBoard = {
 	showForm: function(){
 		this.render();
 		this.playerInfo.style.display = "inline";
+		this.buttonDiv.style.filter = "brightness(50%)";
+		this.displayTextDiv.style.filter = "brightness(50%)";
 		this.gameBoard.style.filter = "brightness(50%)";
 	},
 
@@ -130,20 +135,20 @@ let myGameBoard = {
 		this.playerForm.reset();
 		this.playerInfo.style.display = "none";
 		this.gameBoard.style.filter = "brightness(100%)";
+		this.displayTextDiv.style.filter = "brightness(100%)";
+		this.buttonDiv.style.filter = "brightness(100%)";
 	},
 
 	showButton: function(){
 		this.playButton.style.display = "inline";
-		this.buttonDiv.style.height= "40px";
 	},
 
 	hideButton: function(){
 		this.playButton.style.display = "none";
-		this.buttonDiv.style.height= "10px";
 	},
 
 	displayText: function(string){
-		this.displayTextSpan.innerText = string;
+		this.displayTextDiv.innerText = string;
 	},
 
 //Makes player objects after form is done, feeds them into game, hides form
@@ -171,9 +176,9 @@ let myGameBoard = {
 			let keepGoing = game.keepGoingCheck();
 			 if(keepGoing===false){
 			 	 if(checkTie ===0){
-			 	 	this.displayText("It's a tie! Press play for new game"); 
+			 	 	this.displayText("It's a tie! Press start for new game."); 
 			 	 } else {
-			 		this.displayText(`${myTurn.name} wins! Press play for new game`);
+			 		this.displayText(`${myTurn.name} (${myTurn.XO}) wins! Press start for new game.`);
 			 		}
 			 	this.boardArray =  ["", "", "", "", "", "", "", "", ""];
 			 	game.endGame();

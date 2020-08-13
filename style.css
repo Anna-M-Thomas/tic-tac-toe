@@ -27,10 +27,11 @@ h1 {
 #playerinfo {
 	width: 300px;
 	height: 300px;
-	background-color: #E8EFE6;
+	background-color: #A8EECF;
 	box-shadow : 0 0 0 4px black;
 	display: none;
 	position: absolute;
+	margin-top: 50px;
 	z-index: 1;
 }
 
@@ -57,42 +58,48 @@ input {
 
 .boardsquare {
 	background-color: #57BC90;
-	box-shadow : 0 0 0 4px #015249;
+	box-shadow : 0 0 0 4px #c5eef2;
 	text-align: center;
-	padding-top: 10px;
+	padding-top: 12px;
 	font-size: 90px;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	color: #015951;
 }
 
 .boardsquare:hover {
 	background-color: #2B8F63;
 }
 
+#gameboardpanel {
+	display: flex;
+}
+
 #buttondiv {
 	background-color: #57BC90;
 	text-align: center;
-	line-height: 40px;
-	height: 40px;
-	padding-top: 10px;
-	width: 400px;
-	border-right: solid 4px #015249;
-	border-left: solid 4px #015249;
+	line-height: 45px;
+	height: 50px;
+	width: 120px;
+	border-left: solid 4px #c5eef2;
+	border-bottom: solid 4px #c5eef2;
 }
 
 button {
 	height: 30px;
 	width: 90px;
-}
-
-p {
-	margin: 0;
+	border: none;
+	background-color: #5fddd1;
 }
 
 #displaytextdiv {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color: #57BC90;
 	text-align: center;
-	width: 400px;
-	height: 40px;
-	border-right: solid 4px #015249;
-	border-bottom: solid 4px #015249;
-	border-left: solid 4px #015249;
+	width: 280px;
+	height: 50px;
+	border-right: solid 4px #c5eef2;
+	border-bottom: solid 4px #c5eef2;
 }
